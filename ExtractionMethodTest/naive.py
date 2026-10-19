@@ -8,8 +8,6 @@ from pypdf import PdfReader
 MODEL = "qwen2.5:7b"  # change to whatever you're testing
 CHUNK_CHARS = 1000    # smaller chunks -> more tuples per document
 
-# Ollama's format="json" forces a top-level OBJECT, so an array can't be returned.
-# Passing a schema lets us ask for {"tuples": [ ... ]} explicitly.
 SCHEMA = {
     "type": "object",
     "properties": {
