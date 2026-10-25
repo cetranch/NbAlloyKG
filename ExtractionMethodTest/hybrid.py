@@ -11,7 +11,7 @@ from pathlib import Path
 import ollama
 from pypdf import PdfReader
 
-MODEL = "qwen2.5:7b"          # change to whatever you're testing
+MODEL = "qwen3-vl:32b"          # change to whatever you're testing
 CHUNK_CHARS = 1000            # smaller chunks -> more triples per document
 NUM_CTX = 8192                # the prompt is long; Ollama's default ctx can silently truncate it
 NUM_PREDICT = 4096            # the JSON output is much larger than plain tuples
@@ -210,11 +210,12 @@ def make_prompt(template: str, text: str, registry: RelationRegistry, source_id:
 
 def call_model(prompt: str):
     resp = ollama.generate(
-        model=MODEL,
-        prompt=prompt,
-        format=SCHEMA,
-        options={"temperature": 0.2, "num_predict": NUM_PREDICT, "num_ctx": NUM_CTX},
-    )
+    model=MODEL,
+    prompt=prompt,
+    format=SCHEMA,
+    think=False,
+    options={"temperature": 0.2, "num_predict": 4096},
+    )   
     raw = resp.response
     try:
         return json.loads(raw)

@@ -5,7 +5,7 @@ import argparse
 import ollama
 from pypdf import PdfReader
 
-MODEL = "qwen2.5:7b"  # change to whatever you're testing
+MODEL = "qwen3:30b"  # change to whatever you're testing
 CHUNK_CHARS = 1000    # smaller chunks -> more tuples per document
 
 SCHEMA = {
@@ -70,10 +70,11 @@ def make_prompt(text: str, template: str | None) -> str:
 
 def get_tuples(text: str, template: str | None = None):
     resp = ollama.generate(
-        model=MODEL,
-        prompt=make_prompt(text, template),
-        format=SCHEMA,
-        options={"temperature": 0.2, "num_predict": 2048},
+    model=MODEL,
+    prompt=make_prompt(text, template),
+    format=SCHEMA,
+    think=False,
+    options={"temperature": 0.2, "num_predict": 2048},
     )
     raw = resp.response
     try:
